@@ -1,0 +1,31 @@
+@let cfg = config();
+<div class="field" [class.field--invalid]="showError">
+  <label class="field__label" [for]="inputId()">
+    {{ cfg.label }}
+    @if (cfg.required) {
+      <span class="field__required" aria-hidden="true">*</span>
+    }
+  </label>
+
+  <input
+    class="field__input"
+    [type]="cfg.type"
+    [id]="inputId()"
+    [formControl]="control()"
+    [placeholder]="cfg.placeholder ?? ''"
+    [attr.autocomplete]="cfg.autocomplete ?? null"
+    [attr.inputmode]="cfg.type === 'email' ? 'email' : null"
+    [attr.aria-required]="cfg.required ? 'true' : null"
+    [attr.aria-invalid]="showError ? 'true' : null"
+    [attr.aria-describedby]="describedBy"
+  />
+
+  @if (cfg.hint) {
+    <p class="field__hint" [id]="hintId()">{{ cfg.hint }}</p>
+  }
+  <p class="field__error" [id]="errorId()" role="alert" aria-live="polite">
+    @if (showError) {
+      {{ errorMessage }}
+    }
+  </p>
+</div>

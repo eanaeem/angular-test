@@ -1,0 +1,59 @@
+<section class="card" aria-labelledby="signup-title">
+  @if (status() === 'success') {
+    <div class="success" role="status" aria-live="polite">
+      <div class="success__icon" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          width="28"
+          height="28"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      </div>
+      <h2 id="signup-title" tabindex="-1" class="success__title">You're on the list!</h2>
+      <p class="success__text">Thanks for signing up. We'll be in touch with product updates soon.</p>
+      <button type="button" class="btn btn--ghost" (click)="reset()">Sign up another person</button>
+    </div>
+  } @else {
+    <header class="card__header">
+      <h1 id="signup-title" class="card__title">Stay in the loop</h1>
+      <p class="card__subtitle">Sign up to hear about our latest products and offers.</p>
+    </header>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form__grid">
+        @for (field of fields; track field.name) {
+          <app-dynamic-field [config]="field" [control]="control(field.name)" [submitted]="submitted()" />
+        }
+      </div>
+
+      @if (errorMessage(); as msg) {
+        <p class="form__error" role="alert">{{ msg }}</p>
+      }
+
+      <p class="form__legal">
+        <span aria-hidden="true">*</span> Required fields. By signing up you agree to receive marketing
+        emails. You can unsubscribe at any time.
+      </p>
+
+      <button
+        type="submit"
+        class="btn btn--primary"
+        [disabled]="status() === 'submitting'"
+        [attr.aria-busy]="status() === 'submitting'"
+      >
+        @if (status() === 'submitting') {
+          <span class="spinner" aria-hidden="true"></span>
+          Submitting…
+        } @else {
+          Sign up
+        }
+      </button>
+    </form>
+  }
+</section>
